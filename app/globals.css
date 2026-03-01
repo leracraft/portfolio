@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base smooth behavior */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.8s ease, color 0.8s ease;
+}
+
+/* Gradient Themes Per Section */
+
+.section-home {
+  background: linear-gradient(135deg, #0f172a, #1e3a8a, #9333ea);
+  color: white;
+}
+
+.section-about {
+  background: linear-gradient(135deg, #111827, #0e7490, #14b8a6);
+  color: white;
+}
+
+.section-projects {
+  background: linear-gradient(135deg, #1e1b4b, #7c3aed, #ec4899);
+  color: white;
+}
+
+.section-contact {
+  background: linear-gradient(135deg, #0f172a, #f97316, #ef4444);
+  color: white;
+}
+
+/* Make sections full screen */
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.8s ease;
 }
