@@ -10,7 +10,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const { email, company } = await req.json();
 
     if (!email) {
       return NextResponse.json({ error: "Email required" }, { status: 400 });
@@ -27,8 +27,11 @@ export async function POST(req: Request) {
     const resumeBuffer = fs.readFileSync(resumePath);
 
     await prisma.resumeDownload.create({
-      data: { email },
-    });
+  data: { 
+    email: email,
+    company: company || null, // Store company if provided, else null
+  }
+});
 
     const response = await resend.emails.send({
       from: "Lerabari <onboarding@resend.dev>",
