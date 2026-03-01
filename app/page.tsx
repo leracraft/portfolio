@@ -29,32 +29,42 @@ export default function Home() {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleResumeSubmit = async () => {
-    if (!email) return alert("Please enter an email");
-    setLoading(true);
+const handleResumeSubmit = async () => {
+  if (!email) return alert("Please enter an email");
+  setLoading(true);
 
-    try {
-      // Logic for Resend API Call
-      const res = await fetch("/api/send-resume", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, company: company || "Unknown" }), // Defaults to 'Unknown' if empty
-});
+  try {
+    const res = await fetch("/api/send-resume", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, company: company || "Unknown" }),
+    });
 
-      if (res.ok) {
-        alert("Resume sent! I'll track the delivery through Resend.");
-        setShowModal(false);
-        setEmail("");
-      } else {
-        const error = await res.json();
-        alert(`Error: ${error.message || "Check your Resend configuration"}`);
-      }
-    } catch (err) {
-      alert("Network error. Make sure your API route is set up.");
-    } finally {
-      setLoading(false);
+    if (res.ok) {
+      // 1. Success! Close the modal
+      setShowModal(false);
+      
+      // 2. TRIGGER THE DOWNLOAD IMMEDIATELY
+      const link = document.createElement('a');
+      link.href = '/resume.pdf'; // Ensure your file is in public/resume.pdf
+      link.download = 'Lerabari_Suanu_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 3. Let them know
+      alert("Resume logged! Your download is starting now.");
+      setEmail("");
+      setCompany("");
+    } else {
+      alert("Something went wrong, but you can try again.");
     }
-  };
+  } catch (err) {
+    alert("Check your connection.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -251,7 +261,7 @@ export default function Home() {
             className="bg-white p-10 rounded-[2.5rem] w-full max-w-md shadow-2xl border border-slate-100"
           >
             <h3 className="text-3xl font-black mb-2 text-slate-900">Get My Resume</h3>
-            <p className="text-slate-500 mb-8">Using <strong>Resend</strong> to deliver my CV directly to your inbox and track requests.</p>
+            <p className="text-slate-500 mb-8">Using <strong>Resend</strong> to deliver my CV directly to your inbox.</p>
             <input
               type="email"
               value={email}
