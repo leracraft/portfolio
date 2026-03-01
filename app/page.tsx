@@ -33,7 +33,17 @@ const handleResumeSubmit = async () => {
   if (!email) return alert("Please enter an email");
   setLoading(true);
 
+  // 1. TRIGGER DOWNLOAD IMMEDIATELY (Before the fetch call)
+  // This bypasses browser popup blockers
+  const link = document.createElement('a');
+  link.href = '/resume.pdf'; 
+  link.download = 'Lerabari_Suanu_Resume.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
   try {
+    // 2. Log to Supabase in the background
     const res = await fetch("/api/send-resume", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -41,26 +51,13 @@ const handleResumeSubmit = async () => {
     });
 
     if (res.ok) {
-      // 1. Success! Close the modal
       setShowModal(false);
-      
-      // 2. TRIGGER THE DOWNLOAD IMMEDIATELY
-      const link = document.createElement('a');
-      link.href = '/resume.pdf'; // Ensure your file is in public/resume.pdf
-      link.download = 'Lerabari_Suanu_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // 3. Let them know
-      alert("Resume logged! Your download is starting now.");
       setEmail("");
       setCompany("");
-    } else {
-      alert("Something went wrong, but you can try again.");
     }
   } catch (err) {
-    alert("Check your connection.");
+    console.error("Log failed, but resume was downloaded.");
+    setShowModal(false);
   } finally {
     setLoading(false);
   }
