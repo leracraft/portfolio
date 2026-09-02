@@ -1,305 +1,78 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { FaGithub, FaLinkedin, FaEnvelope, FaCloud, FaCode, FaDatabase, FaUserAstronaut } from "react-icons/fa";
+import {
+  ArrowRight,
+  Cable,
+  Code2,
+  Github,
+  Laptop,
+  Linkedin,
+  Mail,
+  Search,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react";
+
+const work = [
+  { icon: Code2, title: "Software products", copy: "Focused tools built around real problems and real workflows.", bg: "bg-[#f8dfd1]" },
+  { icon: Cable, title: "System integration", copy: "We connect systems that should work together but currently do not.", bg: "bg-[#f8eddc]" },
+  { icon: ShieldCheck, title: "Infrastructure", copy: "Reliable foundations for products that need to keep working.", bg: "bg-[#e8eddf]" },
+  { icon: Search, title: "Research", copy: "Studying difficult problems before deciding what should be built.", bg: "bg-[#f7e4dc]" },
+];
 
 export default function Home() {
-  const projectsRef = useRef<HTMLDivElement>(null);
-  const aboutRef = useRef<HTMLDivElement>(null);
-  const contactRef = useRef<HTMLDivElement>(null);
-
-  // State for mouse tracking
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [showModal, setShowModal] = useState(false);
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  // Update mouse position for the glow effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const scrollTo = (ref: any) => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-const handleResumeSubmit = async () => {
-  if (!email) return alert("Please enter an email");
-  setLoading(true);
-
-  // STEP 1: Immediate Trigger (Standard Download)
-  const link = document.createElement('a');
-  link.href = '/resume.pdf'; 
-  link.download = 'Lerabari_Suanu_Resume.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  // STEP 2: Fallback (Open in new tab just in case)
-  window.open('/resume.pdf', '_blank');
-
-  try {
-    // STEP 3: Log to Supabase
-    await fetch("/api/send-resume", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, company: company || "Unknown" }),
-    });
-    
-    setShowModal(false);
-    setEmail("");
-    setCompany("");
-  } catch (err) {
-    console.error("Log failed, but download should have started.");
-    setShowModal(false);
-  } finally {
-    setLoading(false);
-  }
-};
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
-
-  // Common button style to ensure uniformity
-  const btnStyle = "px-8 py-4 rounded-2xl bg-slate-900 text-white font-bold hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center justify-center min-w-[160px]";
-
   return (
-    <main className="relative bg-[#fcfdfe] text-slate-900 font-sans selection:bg-purple-100 overflow-x-hidden">
-      
-      {/* INTERACTIVE MOUSE GLOW */}
-      <div 
-        className="pointer-events-none fixed inset-0 z-30 transition duration-300 hidden lg:block"
-        style={{
-          background: `radial-gradient(600px at ${mousePos.x}px ${mousePos.y}px, rgba(168, 85, 247, 0.15), transparent 80%)`
-        }}
-      />
+    <main className="min-h-screen bg-[#fffaf2] text-[#252b27] selection:bg-[#f6cdb8]">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-[#252b27]/5 bg-[#fffaf2]/95 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
+          <a href="#top" className="text-xl font-black tracking-[0.22em]">SUANARA</a>
+          <nav className="hidden items-center gap-8 text-sm font-medium text-[#252b27]/60 md:flex">
+            <a href="#work" className="transition hover:text-[#d66f4a]">Work</a>
+            <a href="#research" className="transition hover:text-[#d66f4a]">Research</a>
+            <a href="#about" className="transition hover:text-[#d66f4a]">About</a>
+            <a href="#contact" className="transition hover:text-[#d66f4a]">Contact</a>
+          </nav>
+        </div>
+      </header>
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-white via-purple-50 to-white">
-        {/* Animated Background Orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-150 h-150 bg-purple-200/30 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-125 h-125 bg-blue-100/40 rounded-full blur-[120px]" />
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="relative text-center z-10 px-4"
-        >
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="inline-block py-1 px-4 rounded-full bg-purple-100 text-purple-700 font-bold text-xs uppercase tracking-widest mb-6 border border-purple-200"
-          >
-            Software Engineer • Cloud • AI
-          </motion.span>
-          
-          <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-6 bg-linear-to-r from-slate-900 via-purple-700 to-slate-800 bg-clip-text text-transparent">
-            Lerabari Suanu
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            I build modern digital experiences with <span className="text-purple-600 font-semibold">cloud-native architecture</span> and clean, maintainable code.
-          </p>
-
-          <div className="flex flex-wrap gap-4 justify-center">
-            <button onClick={() => scrollTo(projectsRef)} className={btnStyle}>
-              My Projects
-            </button>
-            <button onClick={() => setShowModal(true)} className={btnStyle}>
-              Get Resume
-            </button>
-            <button onClick={() => scrollTo(aboutRef)} className={btnStyle}>
-              About Me
-            </button>
-            <button onClick={() => scrollTo(contactRef)} className={btnStyle}>
-              Contact
-            </button>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* --- PROJECTS SECTION --- */}
-      <section ref={projectsRef} className="py-32 px-6 bg-slate-50/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
-            <div>
-              <h2 className="text-4xl font-black text-slate-900">Featured Projects</h2>
-              <p className="text-slate-500 mt-2 text-lg">A collection of systems I've designed and deployed.</p>
-            </div>
-          </div>
-
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid md:grid-cols-2 gap-8"
-          >
-            <ProjectCard 
-              icon={<FaCloud className="text-purple-600" />}
-              title="AWS Cloud Infrastructure"
-              description="Engineered a secure, production-grade environment using EC2, S3, and Lambda. Implemented role-based access control (IAM)."
-              tags={['Terraform', 'S3', 'IAM']}
-            />
-            <ProjectCard 
-              icon={<FaCode className="text-blue-600" />}
-              title="Cloud-Native CI/CD"
-              description="Built an automated pipeline containerizing web apps with Docker and deploying via CircleCI to DockerHub."
-              tags={['Docker', 'CircleCI', 'DevOps']}
-            />
-            <ProjectCard 
-              icon={<FaDatabase className="text-emerald-600" />}
-              title="Registration Engine"
-              description="A full-stack system managing enrollment and payments. Designed a relational schema for data integrity."
-              tags={['SQL', 'Node.js', 'React']}
-            />
-            <ProjectCard 
-              icon={<FaUserAstronaut className="text-indigo-600" />}
-              title="Fresh Air Portfolio"
-              description="This site uses Next.js 15, Framer Motion, and Resend for professional mail delivery and tracking."
-              tags={['Next.js', 'Resend', 'Framer']}
-              featured
-            />
-          </motion.div>
+      <section id="top" className="flex min-h-screen items-center px-6 pb-16 pt-32 lg:px-10">
+        <div className="mx-auto w-full max-w-7xl">
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 text-[11px] font-bold uppercase tracking-[0.26em] text-[#d66f4a] sm:mb-8 sm:text-xs">Independent technology studio</motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="max-w-5xl text-[3.35rem] font-black leading-[0.99] tracking-[-0.055em] sm:text-7xl lg:text-8xl">Building technology that removes barriers to <span className="text-[#d66f4a]">progress.</span></motion.h1>
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mt-8 max-w-2xl text-lg leading-8 text-[#252b27]/60 sm:mt-10 sm:text-xl">Suanara builds focused software products and explores difficult problems where existing systems create unnecessary friction.</motion.p>
+          <a href="#work" className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#68785b] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg">Explore our work <ArrowRight size={16} /></a>
         </div>
       </section>
 
-      {/* --- ABOUT SECTION --- */}
-      <section ref={aboutRef} className="py-32 px-6 bg-white overflow-hidden">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-          <motion.div 
-             initial={{ opacity: 0, scale: 0.9 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             className="relative"
-          >
-            <div className="aspect-4/5 bg-purple-50 rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
-              <img 
-                src="/profile.jpg" 
-                alt="Lerabari Suanu" 
-                className="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
-              />
-            </div>
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl z-0" />
-          </motion.div>
-
-<motion.div 
-  initial={{ opacity: 0, x: 40 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.8 }}
->
-  <h2 className="text-5xl font-black mb-8 text-slate-900 uppercase tracking-tighter">
-    Building Resilient Systems.
-  </h2>
-  <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
-    <p>
-      I am a Technology Professional with a Master’s in CS from the University of Bridgeport. While my degree provided a rigorous foundation in Cloud Architecture and Full-Stack Development, I believe true engineering happens in the trenches of debugging and optimization.
-    </p>
-    
-    <p className="border-l-4 border-purple-200 pl-4 py-2 bg-purple-50/50 rounded-r-xl text-slate-700 italic">
-      "I have a Master’s in CS, which mostly means I’m qualified to stare at a screen until the red error messages go away. I build cloud systems and full-stack apps, usually powered by caffeine and way too many open browser tabs."
-    </p>
-
-    <p>
-      I focus on architecting solutions that scale. Whether I’m automating CI/CD pipelines, securing AWS infrastructure, or designing relational databases, my goal is to build reliable systems that solve real-world problems—leveraging every tool available to get the job done right.
-    </p>
-  </div>
-</motion.div>
-        </div>
-      </section>
-
-      {/* --- CONTACT SECTION --- */}
-      <section ref={contactRef} className="py-32 bg-slate-900 text-white relative overflow-hidden">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mx-auto px-6 text-center relative z-10"
-        >
-          <h2 className="text-5xl font-black mb-6">Let's Build Something.</h2>
-          <p className="text-slate-400 mb-12 text-xl">Currently looking for roles in Software Engineering and Cloud Systems.</p>
-          
-          <div className="flex gap-10 justify-center text-4xl mb-16">
-            <a href="https://github.com/leracraft" target="_blank" className="hover:text-purple-400 transition-all"><FaGithub /></a>
-            <a href="https://linkedin.com/in/lerabari-suanu" target="_blank" className="hover:text-purple-400 transition-all"><FaLinkedin /></a>
-            <a href="mailto:lerabari65@gmail.com" className="hover:text-purple-400 transition-all"><FaEnvelope /></a>
+      <section id="work" className="px-6 py-20 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 flex items-end justify-between gap-8"><div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#b85d3e]">What we build</p><h2 className="mt-5 max-w-3xl text-5xl font-black tracking-[-0.04em] sm:text-6xl">Small products. Serious problems.</h2></div><div className="hidden text-4xl text-[#e6b965] md:block">☀︎</div></div>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {work.map(({ icon: Icon, title, copy, bg }) => (
+              <motion.article key={title} whileHover={{ y: -6, rotate: -0.35 }} transition={{ duration: 0.2 }} className={`${bg} min-h-64 rounded-[2rem] p-7 shadow-[0_10px_35px_rgba(37,43,39,0.05)]`}>
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#252b27]/10 bg-[#fffaf2]/70"><Icon size={22} strokeWidth={1.8} /></div>
+                <h3 className="mt-8 text-xl font-bold">{title}</h3><p className="mt-4 leading-7 text-[#252b27]/60">{copy}</p><ArrowRight className="ml-auto mt-7" size={18} />
+              </motion.article>
+            ))}
           </div>
-
-          <a
-            href="mailto:lerabari65@gmail.com"
-            className="inline-block px-12 py-5 bg-purple-600 text-white rounded-2xl font-black text-lg hover:bg-purple-500 transition-all shadow-xl"
-          >
-            Start a Conversation
-          </a>
-        </motion.div>
+        </div>
       </section>
 
-      {/* MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }} 
-            animate={{ opacity: 1, scale: 1 }} 
-            className="bg-white p-10 rounded-[2.5rem] w-full max-w-md shadow-2xl border border-slate-100"
-          >
-            <h3 className="text-3xl font-black mb-2 text-slate-900">Get My Resume</h3>
-            <p className="text-slate-500 mb-8">Using <strong>Resend</strong> to deliver my CV directly to your inbox.</p>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl mb-4 focus:ring-4 focus:ring-purple-100 outline-none transition"
-              placeholder="name@company.com"
-            />
-            <button
-              onClick={handleResumeSubmit}
-              disabled={loading}
-              className="w-full bg-purple-600 text-white py-5 rounded-2xl font-bold text-lg hover:bg-purple-700 transition shadow-lg"
-            >
-              {loading ? "Processing..." : "Send Resume"}
-            </button>
-            <button onClick={() => setShowModal(false)} className="w-full mt-6 text-slate-400 hover:text-slate-600 font-medium uppercase tracking-tighter text-xs">Close</button>
-          </motion.div>
+      <section id="research" className="px-6 py-12 lg:px-10 lg:py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 rounded-[2.25rem] bg-[#e8eddf] p-8 sm:p-12 lg:grid-cols-[1fr_0.95fr] lg:p-16">
+          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#68785b]">Current research</p><h2 className="mt-6 max-w-3xl text-5xl font-black tracking-[-0.04em]">The last mile of clinical data.</h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">We are learning how independent healthcare practices move information from in-office clinical equipment into the software they already use, and where that process still breaks down.</p><p className="mt-5 max-w-2xl text-sm leading-7 text-[#252b27]/45">Research conversations focus only on technology and workflow. We do not request patient information.</p></div>
+          <div className="flex items-center justify-center"><div className="w-full rounded-[2rem] bg-[#fffaf2]/65 p-6 sm:p-8"><div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3 text-center"><div className="flex flex-col items-center gap-3"><div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#68785b]/25 bg-[#fffaf2]"><Stethoscope size={27} /></div><span className="text-[11px] font-bold uppercase tracking-[0.12em]">Clinical equipment</span></div><ArrowRight className="text-[#68785b]" size={18} /><div className="flex flex-col items-center gap-3"><div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#68785b] text-3xl font-black text-white">S</div><span className="text-[11px] font-bold uppercase tracking-[0.12em]">Suanara</span></div><ArrowRight className="text-[#68785b]" size={18} /><div className="flex flex-col items-center gap-3"><div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#68785b]/25 bg-[#fffaf2]"><Laptop size={27} /></div><span className="text-[11px] font-bold uppercase tracking-[0.12em]">Existing software</span></div></div></div></div>
         </div>
-      )}
+      </section>
+
+      <section id="about" className="px-6 py-24 lg:px-10 lg:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.65fr_1fr] md:items-center"><div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/profile.jpg" alt="Lera Suanu, founder of Suanara" className="aspect-square h-full w-full object-cover" /></div><div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#d66f4a]">Founder</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Lera Suanu</h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">Lera is a software engineer focused on full-stack systems, cloud infrastructure, automation, and useful products. Suanara is the home for that work.</p></div></div>
+      </section>
+
+      <section id="contact" className="px-6 pb-24 lg:px-10 lg:pb-28"><div className="mx-auto max-w-7xl rounded-[2.25rem] bg-[#f5e8bd] p-8 sm:p-12"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8b772f]">Contact</p><h2 className="mt-6 max-w-3xl text-5xl font-black tracking-[-0.04em]">Have a problem worth understanding?</h2><div className="mt-10 flex items-center gap-4">{[{ href: "https://github.com/leracraft", label: "GitHub", icon: Github }, { href: "https://linkedin.com/in/lerabari-suanu", label: "LinkedIn", icon: Linkedin }, { href: "mailto:lerabari65@gmail.com", label: "Email", icon: Mail }].map(({ href, label, icon: Icon }) => (<a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fffaf2]/75 transition hover:-translate-y-1 hover:bg-white"><Icon size={20} /></a>))}</div></div></section>
+
+      <footer className="border-t border-[#252b27]/10 px-6 py-8 lg:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#252b27]/40 sm:flex-row sm:items-center sm:justify-between"><p className="font-bold tracking-[0.2em]">SUANARA</p><p>Independent software products and technology research.</p></div></footer>
     </main>
-  );
-}
-
-// Sub-component for Project Cards
-function ProjectCard({ icon, title, description, tags, featured = false }: any) {
-  return (
-    <motion.div 
-      variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-      className={`group bg-white p-8 rounded-4xl border border-slate-200/60 shadow-sm hover:shadow-2xl transition-all ${featured ? 'hover:border-purple-200' : 'hover:border-blue-200'}`}
-    >
-      <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-        {icon}
-      </div>
-      <h3 className="text-2xl font-bold mb-3">{title}</h3>
-      <p className="text-slate-600 mb-6 leading-relaxed">{description}</p>
-      <div className="flex gap-2 flex-wrap">
-        {tags.map((tag: any) => (
-          <span key={tag} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-slate-100 rounded-lg text-slate-500 group-hover:bg-purple-50 group-hover:text-purple-600 transition-colors">
-            {tag}
-          </span>
-        ))}
-      </div>
-    </motion.div>
   );
 }
