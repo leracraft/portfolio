@@ -1,42 +1,53 @@
 @import "tailwindcss";
 
-/* Base smooth behavior */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  transition: background 0.8s ease, color 0.8s ease;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: #fffaf2;
+  color: #252b27;
 }
 
-/* Gradient Themes Per Section */
-
-.section-home {
-  background: linear-gradient(135deg, #0f172a, #1e3a8a, #9333ea);
-  color: white;
-}
-
-.section-about {
-  background: linear-gradient(135deg, #111827, #0e7490, #14b8a6);
-  color: white;
-}
-
-.section-projects {
-  background: linear-gradient(135deg, #1e1b4b, #7c3aed, #ec4899);
-  color: white;
-}
-
-.section-contact {
-  background: linear-gradient(135deg, #0f172a, #f97316, #ef4444);
-  color: white;
-}
-
-/* Make sections full screen */
 section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.8s ease;
+  scroll-margin-top: 1rem;
+}
+
+.hero-emphasis,
+.handwritten {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+:focus-visible {
+  outline: 3px solid #68785b;
+  outline-offset: 5px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 999px;
+  background: #252b27;
+  color: #fffaf2;
+  padding: 0.75rem 1.25rem;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
