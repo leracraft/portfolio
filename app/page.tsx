@@ -34,7 +34,7 @@ export default function Home() {
             <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mt-8 max-w-2xl text-lg leading-8 text-[#252b27]/60 sm:mt-10 sm:text-xl">I'm Lera, a full-stack software engineer building reliable products from database architecture and APIs to intuitive React experiences. I enjoy solving hard systems problems and making everyday workflows better.</motion.p>
             <a href="#work" className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#68785b] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg">Explore my work <ArrowRight size={16} /></a>
           </div>
-          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/profile-v2.jpg" alt="Portrait of Lera Suanu" className="aspect-[4/5] h-full w-full object-cover" /></div>
+          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/lera-portrait.jpg" alt="Portrait of Lera Suanu" className="aspect-[4/5] h-full w-full object-cover" /></div>
         </div>
       </section>
 
@@ -66,7 +66,7 @@ export default function Home() {
 
       <section id="about" className="px-6 py-24 lg:px-10 lg:py-28">
         <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.65fr_1fr] md:items-center">
-          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/profile-v2.jpg" alt="Lera Suanu" className="aspect-square h-full w-full object-cover" /></div>
+          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/lera-portrait.jpg" alt="Lera Suanu" className="aspect-square h-full w-full object-cover" /></div>
           <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#d66f4a]">About me</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Hi, I'm Lera.</h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">I have an M.S. in Computer Science from the University of Bridgeport and a B.S. in Computer Science & Technology from Hebei University of Science & Technology. I work across TypeScript, React, Node.js, PostgreSQL, Redis, AWS, and infrastructure automation. I care about software that's useful, secure, and built to last.</p><p className="mt-5 leading-7 text-[#252b27]/60">My favorite challenges involve data integrity, real-time behavior, system design, and helping teams ship with confidence.</p><a href="https://github.com/leracraft" target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 font-bold text-[#68785b]">See my GitHub <ExternalLink size={16}/></a></div>
         </div>
       </section>
