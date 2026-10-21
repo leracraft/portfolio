@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Code2, Database, Github, Linkedin, Mail, ShieldCheck, TestTube2, Cloud, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { MotionConfig, motion } from "framer-motion";
+import { ArrowDown, Download, Sparkles, ArrowRight, Code2, Database, Github, Linkedin, Mail, ShieldCheck, TestTube2, Cloud, ExternalLink } from "lucide-react";
 
 const projects = [
   { icon: Code2, title: "Real-Time Offer Negotiation", tech: "React · TypeScript · Node.js · PostgreSQL · Socket.io · Stripe", copy: "Built an end-to-end offer and counter-offer system with live updates, payment on acceptance, scheduled expiration, and bulk imports.", bg: "bg-[#f8dfd1]" },
@@ -13,38 +14,45 @@ const projects = [
 
 export default function Home() {
   return (
+    <MotionConfig reducedMotion="user">
     <main className="min-h-screen bg-[#fffaf2] text-[#252b27] selection:bg-[#f6cdb8]">
+      <a href="#content" className="skip-link">Skip to content</a>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#252b27]/5 bg-[#fffaf2]/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-          <a href="#top" className="text-xl font-black tracking-[0.12em]">LERA SUANU</a>
+          <a href="#top" className="text-lg font-black tracking-[-0.04em] sm:text-xl">lera suanu<span className="text-[#b85d3e]">.</span></a>
           <nav className="hidden items-center gap-8 text-sm font-medium text-[#252b27]/60 md:flex">
             <a href="#work" className="transition hover:text-[#d66f4a]">Projects</a>
             <a href="#experience" className="transition hover:text-[#d66f4a]">Experience</a>
             <a href="#about" className="transition hover:text-[#d66f4a]">About</a>
             <a href="#contact" className="transition hover:text-[#d66f4a]">Contact</a>
           </nav>
+          <a href="/resume.pdf" download="Lera-Suanu-Resume.pdf" className="inline-flex items-center gap-2 rounded-full border border-[#252b27]/20 px-4 py-2 text-xs font-bold transition hover:bg-[#e8eddf]">Résumé <Download size={14} aria-hidden="true" /></a>
         </div>
       </header>
 
+      <div id="content" tabIndex={-1}>
       <section id="top" className="flex min-h-screen items-center px-6 pb-16 pt-32 lg:px-10">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.3fr_0.7fr]">
           <div>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 text-[11px] font-bold uppercase tracking-[0.26em] text-[#d66f4a] sm:mb-8 sm:text-xs">Software Engineer · Full-Stack · Cloud · Automation</motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="text-[3.35rem] font-black leading-[0.99] tracking-[-0.055em] sm:text-7xl lg:text-8xl">Building software that makes <span className="text-[#d66f4a]">complex things simple.</span></motion.h1>
-            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mt-8 max-w-2xl text-lg leading-8 text-[#252b27]/60 sm:mt-10 sm:text-xl">I'm Lera, a full-stack software engineer building reliable products from database architecture and APIs to intuitive React experiences. I enjoy solving hard systems problems and making everyday workflows better.</motion.p>
-            <a href="#work" className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#68785b] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg">Explore my work <ArrowRight size={16} /></a>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 text-[11px] font-bold uppercase tracking-[0.26em] text-[#d66f4a] sm:mb-8 sm:text-xs"><span className="mr-3 inline-block h-2 w-2 rounded-full bg-[#68785b]" />Software engineer. Curious human.</motion.p>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="text-[3.15rem] font-black leading-[0.99] tracking-[-0.055em] sm:text-7xl lg:text-[5.6rem]">A little curiosity.<br />A lot of <span className="hero-emphasis text-[#b85d3e]">“what if?”</span><br />Software that works.</motion.h1>
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mt-8 max-w-2xl text-lg leading-8 text-[#252b27]/60 sm:mt-10 sm:text-xl">I’m Lera. I turn complicated systems into thoughtful, dependable experiences—from the database to the very last button. Full-stack, cloud, and a healthy suspicion of anything described as a “quick fix.”</motion.p>
+            <div className="mt-9 flex flex-wrap items-center gap-5"><a href="#work" className="inline-flex items-center gap-3 rounded-full bg-[#68785b] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg">Meet the work <ArrowRight size={16} aria-hidden="true" /></a><a href="/resume.pdf" download="Lera-Suanu-Resume.pdf" className="inline-flex items-center gap-2 border-b border-[#252b27]/30 py-2 text-sm font-bold transition hover:text-[#b85d3e]">Download résumé <Download size={16} aria-hidden="true" /></a></div>
+            <p className="mt-7 font-mono text-xs text-[#252b27]/60">Good systems. Fewer headaches. A little personality.</p>
           </div>
-          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/lera-portrait.jpg" alt="Portrait of Lera Suanu" className="aspect-[4/5] h-full w-full object-cover" /></div>
+          <div className="relative mx-auto w-full max-w-md pb-5 lg:ml-auto"><div className="absolute -inset-1 rotate-3 sm:-inset-3 rounded-[2rem] border border-[#68785b]/30" aria-hidden="true" /><figure className="relative -rotate-2 rounded-[1.5rem] bg-white p-3 shadow-[0_16px_45px_rgba(37,43,39,0.10)]"><Image sizes="(min-width: 1024px) 448px, (min-width: 640px) 448px, 90vw" src="/lera-portrait.jpg" alt="Portrait of Lera Suanu" width={1254} height={1254} fetchPriority="high" className="aspect-[4/5] w-full rounded-[1rem] object-cover" /><figcaption className="flex items-center justify-between px-2 pb-1 pt-4 text-sm"><span className="handwritten text-xl">Hi, I’m Lera.</span><span className="font-mono text-[10px] uppercase tracking-widest text-[#252b27]/60">Human behind the code</span></figcaption></figure><span className="absolute -right-2 -top-5 rotate-12 rounded-full bg-[#f5e8bd] p-4 text-[#68785b] shadow-sm" aria-hidden="true"><Sparkles size={26} /></span></div>
         </div>
       </section>
 
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border-y border-[#252b27]/15 px-6 py-5 text-xs font-medium text-[#252b27]/65 lg:px-10"><span className="font-mono">THOUGHTFUL FROM END TO END</span><span>React & TypeScript</span><span>APIs & data</span><span>Cloud & automation</span><a href="#work" aria-label="Scroll to selected work" className="rounded-full border border-[#252b27]/20 p-2"><ArrowDown size={16} /></a></div>
+
       <section id="work" className="px-6 py-20 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#b85d3e]">Selected engineering work</p><h2 className="mt-5 max-w-3xl text-5xl font-black tracking-[-0.04em] sm:text-6xl">Real problems. Thoughtful solutions.</h2></div>
+          <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#b85d3e]">01 / Selected engineering work</p><h2 className="mt-5 max-w-3xl text-5xl font-black tracking-[-0.04em] sm:text-6xl">Less friction.<br />More “that just works.”</h2></div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map(({ icon: Icon, title, tech, copy, bg }) => (
+            {projects.map(({ icon: Icon, title, tech, copy, bg }, index) => (
               <motion.article key={title} whileHover={{ y: -6, rotate: -0.35 }} transition={{ duration: 0.2 }} className={`${bg} min-h-72 rounded-[2rem] p-7 shadow-[0_10px_35px_rgba(37,43,39,0.05)]`}>
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#252b27]/10 bg-[#fffaf2]/70"><Icon size={22} strokeWidth={1.8} /></div>
+                <div className="flex items-center justify-between"><div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#252b27]/10 bg-[#fffaf2]/70"><Icon size={22} strokeWidth={1.8} aria-hidden="true" /></div><span className="font-mono text-xs text-[#252b27]/50">0{index + 1}</span></div>
                 <h3 className="mt-7 text-xl font-bold">{title}</h3><p className="mt-2 text-xs font-medium leading-5 text-[#68785b]">{tech}</p><p className="mt-4 leading-7 text-[#252b27]/60">{copy}</p>
               </motion.article>
             ))}
@@ -55,7 +63,7 @@ export default function Home() {
 
       <section id="experience" className="px-6 py-12 lg:px-10 lg:py-20">
         <div className="mx-auto grid max-w-7xl gap-10 rounded-[2.25rem] bg-[#e8eddf] p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:p-16">
-          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#68785b]">Professional experience</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Engineering from idea to production.</h2></div>
+          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#68785b]">02 / The experience</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Ideas are lovely.<br />Shipping is lovelier.</h2></div>
           <div className="space-y-8">
             <div><p className="text-sm font-bold text-[#68785b]">2026 – Present</p><h3 className="mt-2 text-2xl font-bold">Software Engineer · ReefnBid</h3><p className="mt-3 leading-7 text-[#252b27]/65">Shipping full-stack commerce features, real-time systems, account safeguards, and automated release testing. Tackling concurrency, distributed caching, and data integrity across production services.</p></div>
             <div><p className="text-sm font-bold text-[#68785b]">2024 – 2025</p><h3 className="mt-2 text-2xl font-bold">Cloud & DevOps · Independent Projects</h3><p className="mt-3 leading-7 text-[#252b27]/65">Built AWS infrastructure with Terraform, Docker, Kubernetes, and CI/CD pipelines, with a focus on security and repeatable deployment.</p></div>
@@ -66,14 +74,16 @@ export default function Home() {
 
       <section id="about" className="px-6 py-24 lg:px-10 lg:py-28">
         <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.65fr_1fr] md:items-center">
-          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><img src="/lera-portrait.jpg" alt="Lera Suanu" className="aspect-square h-full w-full object-cover" /></div>
-          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#d66f4a]">About me</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Hi, I'm Lera.</h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">I have an M.S. in Computer Science from the University of Bridgeport and a B.S. in Computer Science & Technology from Hebei University of Science & Technology. I work across TypeScript, React, Node.js, PostgreSQL, Redis, AWS, and infrastructure automation. I care about software that's useful, secure, and built to last.</p><p className="mt-5 leading-7 text-[#252b27]/60">My favorite challenges involve data integrity, real-time behavior, system design, and helping teams ship with confidence.</p><a href="https://github.com/leracraft" target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 font-bold text-[#68785b]">See my GitHub <ExternalLink size={16}/></a></div>
+          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><Image sizes="(min-width: 768px) 40vw, 90vw" src="/lera-portrait.jpg" alt="Lera Suanu" width={1254} height={1254} loading="lazy" className="aspect-square h-full w-full object-cover" /></div>
+          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#d66f4a]">03 / Behind the keyboard</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Serious about the work.<br /><span className="font-serif italic font-normal text-[#b85d3e]">A little less serious about myself.</span></h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">I have an M.S. in Computer Science from the University of Bridgeport and a B.S. in Computer Science & Technology from Hebei University of Science & Technology. I work across TypeScript, React, Node.js, PostgreSQL, Redis, AWS, and infrastructure automation. I care about software that’s useful, secure, and built to last.</p><p className="mt-5 leading-7 text-[#252b27]/60">I like asking good questions, untangling tricky systems, and making things feel easier than they were to build. Previously, I taught programming to more than 200 students—excellent practice for explaining complicated things without making anyone regret asking.</p><a href="https://github.com/leracraft" target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 font-bold text-[#68785b]">See what I’m building <ExternalLink size={16}/></a></div>
         </div>
       </section>
 
-      <section id="contact" className="px-6 pb-24 lg:px-10 lg:pb-28"><div className="mx-auto max-w-7xl rounded-[2.25rem] bg-[#f5e8bd] p-8 sm:p-12"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8b772f]">Get in touch</p><h2 className="mt-6 max-w-3xl text-5xl font-black tracking-[-0.04em]">Let's build something meaningful.</h2><p className="mt-5 max-w-xl text-lg text-[#252b27]/60">I'm always happy to connect about engineering, collaboration, and interesting technical challenges.</p><div className="mt-10 flex items-center gap-4">{[{ href: "https://github.com/leracraft", label: "GitHub", icon: Github }, { href: "https://linkedin.com/in/lerabari-suanu-1a2b3c", label: "LinkedIn", icon: Linkedin }, { href: "mailto:lerabari65@gmail.com", label: "Email", icon: Mail }].map(({ href, label, icon: Icon }) => (<a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fffaf2]/75 transition hover:-translate-y-1 hover:bg-white"><Icon size={20} /></a>))}</div></div></section>
+      <section id="contact" className="px-6 pb-24 lg:px-10 lg:pb-28"><div className="mx-auto max-w-7xl rounded-[2.25rem] bg-[#f5e8bd] p-8 sm:p-12"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8b772f]">04 / Say hello</p><h2 className="mt-6 max-w-3xl text-5xl font-black tracking-[-0.04em]">Have a good problem?<br />I’m all ears.</h2><p className="mt-5 max-w-xl text-lg text-[#252b27]/60">An interesting role, a thoughtful collaboration, or a wonderfully specific engineering question? I’d love to hear it. Bonus points if it starts with “what if.”</p><a href="mailto:lerabari65@gmail.com" className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#252b27] px-6 py-3 text-sm font-bold text-[#fffaf2] transition hover:bg-[#68785b]">Let’s talk <ArrowRight size={16} aria-hidden="true" /></a><div className="mt-8 flex items-center gap-4">{[{ href: "https://github.com/leracraft", label: "GitHub", icon: Github }, { href: "https://linkedin.com/in/lerabari-suanu-1a2b3c", label: "LinkedIn", icon: Linkedin }, { href: "mailto:lerabari65@gmail.com", label: "Email", icon: Mail }].map(({ href, label, icon: Icon }) => (<a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fffaf2]/75 transition hover:-translate-y-1 hover:bg-white"><Icon size={20} /></a>))}</div></div></section>
 
-      <footer className="border-t border-[#252b27]/10 px-6 py-8 lg:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#252b27]/40 sm:flex-row sm:items-center sm:justify-between"><p className="font-bold tracking-[0.2em]">LERA SUANU</p><p>Software engineering · Cloud · Automation</p></div></footer>
+      </div>
+      <footer className="border-t border-[#252b27]/10 px-6 py-8 lg:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#252b27]/40 sm:flex-row sm:items-center sm:justify-between"><p className="font-bold tracking-[0.2em]">LERA SUANU</p><p>Built with care. And a few very opinionated semicolons.</p></div></footer>
     </main>
+    </MotionConfig>
   );
 }
