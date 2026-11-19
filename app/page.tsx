@@ -1,89 +1,169 @@
-"use client";
-
 import Image from "next/image";
-import { MotionConfig, motion } from "framer-motion";
-import { ArrowDown, Download, Sparkles, ArrowRight, Code2, Database, Github, Linkedin, Mail, ShieldCheck, TestTube2, Cloud, ExternalLink } from "lucide-react";
+import { connection } from "next/server";
+import { ContactForm } from "./contact-form";
 
+const resume = "/resume.pdf";
+const email = "Lerabari65@gmail.com";
 const projects = [
-  { icon: Code2, title: "Real-Time Offer Negotiation", tech: "React · TypeScript · Node.js · PostgreSQL · Socket.io · Stripe", copy: "Built an end-to-end offer and counter-offer system with live updates, payment on acceptance, scheduled expiration, and bulk imports.", bg: "bg-[#f8dfd1]" },
-  { icon: ShieldCheck, title: "Account Risk Controls", tech: "Node.js · Prisma · PostgreSQL · Redis · React", copy: "Developed automated account restrictions, configurable limits, refund workflows, and an internal review queue with an audit trail.", bg: "bg-[#f8eddc]" },
-  { icon: TestTube2, title: "Browser-Based QA Automation", tech: "Browserbase · Playwright · TypeScript · Node.js", copy: "Replaced a 13-part manual release checklist with guided automated smoke tests and human review checkpoints.", bg: "bg-[#e8eddf]" },
-  { icon: Database, title: "Unified Multi-Flow Cart", tech: "Node.js · Stripe · Prisma · React", copy: "Unified two purchasing flows, with per-item validation, vendor-level processing, and itemized transactional emails.", bg: "bg-[#f7e4dc]" },
-  { icon: Cloud, title: "Secure AWS Data Protection", tech: "AWS S3 · CloudTrail · Athena · Terraform · IAM", copy: "Provisioned version-controlled cloud storage with versioning, Object Lock, replication, lifecycle policies, and audit monitoring.", bg: "bg-[#e8eddf]" },
+  {
+    title: "Marketplace checkout",
+    stack: "TypeScript · Stripe · Prisma · PostgreSQL · Playwright",
+    problem: "Buyers needed one checkout for saved cards and alternative payment methods, with consistent pricing and safeguards against charging for an item already sold.",
+    contribution: "I unified the checkout form and the server-side purchase flow. The API claims items before charging, and payment reconciliation checks the amount Stripe actually captured against the expected charge.",
+    outcome: "The changes merged with unit coverage for payment reuse and local browser coverage for saved-card and alternative checkout paths.",
+  },
+  {
+    title: "Prepayment and ledger consistency",
+    stack: "Stripe · PostgreSQL · SQL · Prisma · Vitest",
+    problem: "Prepayment eligibility had to stay consistent when deposits settled or a bank returned funds.",
+    contribution: "I added a funding marker and a SQL backfill based on settled ledger entries. For returns, I updated the ledger and funding status in the same transaction under a balance lock.",
+    outcome: "The change merged with regression coverage for replayed returns. Local Stripe test-mode checks exercised deposits and reversals.",
+  },
+  {
+    title: "Scheduled notification reliability",
+    stack: "Node.js · PostgreSQL · Prisma · Vitest",
+    problem: "A failed payment-method lookup could repeat notifications and stall processing for subsequent records.",
+    contribution: "I traced the failure to the scheduled job, added a conditional database update to claim each record before sending, and made the lookup optional with a fallback.",
+    outcome: "The fix merged with regression tests. A local PostgreSQL run showed the job could continue through the lookup failure and avoid repeat sends on a second pass.",
+  },
+  {
+    title: "Production error monitoring and triage",
+    stack: "Sentry · GitHub Actions · Claude Code · Vitest",
+    problem: "API failures were missing from operational reporting, and duplicate or non-production alerts made higher-priority issues harder to identify.",
+    contribution: "I added API error reporting, implemented severity rules and deduplication, and filtered alerts to production. I added a GitHub Actions workflow that uses Claude Code to review Sentry issues against the codebase.",
+    outcome: "The changes merged with automated coverage for severity, alert filtering, and Sentry polling. The workflow supports a manual dry run.",
+  },
+  {
+    title: "Marketplace catalog design",
+    problem: "A single record represented the product, its listing, and the order line. That model made it difficult to support both one-of-a-kind items and stocked inventory.",
+    contribution: "I contribute to the catalog redesign, which separates product classification from how items are listed and recorded on orders. The design accounts for existing listing and checkout workflows.",
+  },
+  {
+    title: "Seller team onboarding",
+    stack: "React · TypeScript · Prisma · PostgreSQL · Vitest",
+    problem: "Marketplace sellers needed to invite teammates and manage access from their own dashboard.",
+    contribution: "I implemented the settings UI, invitation and acceptance APIs, and the relational schema. I used unique constraints to prevent duplicate invitations and transactional updates to apply acceptance and membership changes together.",
+    outcome: "The feature merged with unit tests for permissions and invitation outcomes and a local headless onboarding walkthrough.",
+  },
 ];
 
-export default function Home() {
+export default async function Home() {
+  await connection();
+  const configured = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM &&
+    process.env.CONTACT_TO && process.env.CONTACT_REDIS_URL &&
+    process.env.CONTACT_REDIS_TOKEN && process.env.CONTACT_RATE_SECRET);
+
   return (
-    <MotionConfig reducedMotion="user">
-    <main className="min-h-screen bg-[#fffaf2] text-[#252b27] selection:bg-[#f6cdb8]">
+    <>
       <a href="#content" className="skip-link">Skip to content</a>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-[#252b27]/5 bg-[#fffaf2]/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-          <a href="#top" className="text-lg font-black tracking-[-0.04em] sm:text-xl">lera suanu<span className="text-[#b85d3e]">.</span></a>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-[#252b27]/60 md:flex">
-            <a href="#work" className="transition hover:text-[#d66f4a]">Projects</a>
-            <a href="#experience" className="transition hover:text-[#d66f4a]">Experience</a>
-            <a href="#about" className="transition hover:text-[#d66f4a]">About</a>
-            <a href="#contact" className="transition hover:text-[#d66f4a]">Contact</a>
+      <header className="site-header">
+        <div className="shell header-inner">
+          <a href="#top" className="wordmark">Lera Suanu</a>
+          <nav aria-label="Main navigation">
+            <a href="#work">Projects</a>
+            <a href="#experience">Experience</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
           </nav>
-          <a href="/resume.pdf" download="Lera-Suanu-Resume.pdf" className="inline-flex items-center gap-2 rounded-full border border-[#252b27]/20 px-4 py-2 text-xs font-bold transition hover:bg-[#e8eddf]">Résumé <Download size={14} aria-hidden="true" /></a>
         </div>
       </header>
-
-      <div id="content" tabIndex={-1}>
-      <section id="top" className="flex min-h-screen items-center px-6 pb-16 pt-32 lg:px-10">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.3fr_0.7fr]">
+      <main id="content" tabIndex={-1}>
+        <section id="top" className="shell hero">
           <div>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6 text-[11px] font-bold uppercase tracking-[0.26em] text-[#d66f4a] sm:mb-8 sm:text-xs"><span className="mr-3 inline-block h-2 w-2 rounded-full bg-[#68785b]" />Software engineer. Curious human.</motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="text-[3.15rem] font-black leading-[0.99] tracking-[-0.055em] sm:text-7xl lg:text-[5.6rem]">A little curiosity.<br />A lot of <span className="hero-emphasis text-[#b85d3e]">“what if?”</span><br />Software that works.</motion.h1>
-            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mt-8 max-w-2xl text-lg leading-8 text-[#252b27]/60 sm:mt-10 sm:text-xl">I’m Lera. I turn complicated systems into thoughtful, dependable experiences—from the database to the very last button. Full-stack, cloud, and a healthy suspicion of anything described as a “quick fix.”</motion.p>
-            <div className="mt-9 flex flex-wrap items-center gap-5"><a href="#work" className="inline-flex items-center gap-3 rounded-full bg-[#68785b] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg">Meet the work <ArrowRight size={16} aria-hidden="true" /></a><a href="/resume.pdf" download="Lera-Suanu-Resume.pdf" className="inline-flex items-center gap-2 border-b border-[#252b27]/30 py-2 text-sm font-bold transition hover:text-[#b85d3e]">Download résumé <Download size={16} aria-hidden="true" /></a></div>
-            <p className="mt-7 font-mono text-xs text-[#252b27]/60">Good systems. Fewer headaches. A little personality.</p>
+            <p className="eyebrow">Software engineer</p>
+            <h1>I’m Lera Suanu.</h1>
+            <p className="hero-lead">I build and support full-stack software, from checkout and database changes to automated regression tests.</p>
+            <p className="hero-detail">3 years of total experience, including freelance work. M.S. in Computer Science.</p>
+            <div className="actions">
+              <a className="button primary" href={resume}>View Resume</a>
+              <a className="button secondary" href={resume} download="Lera-Suanu-Resume.pdf">Download Resume</a>
+            </div>
           </div>
-          <div className="relative mx-auto w-full max-w-md pb-5 lg:ml-auto"><div className="absolute -inset-1 rotate-3 sm:-inset-3 rounded-[2rem] border border-[#68785b]/30" aria-hidden="true" /><figure className="relative -rotate-2 rounded-[1.5rem] bg-white p-3 shadow-[0_16px_45px_rgba(37,43,39,0.10)]"><Image sizes="(min-width: 1024px) 448px, (min-width: 640px) 448px, 90vw" src="/lera-portrait.jpg" alt="Portrait of Lera Suanu" width={1254} height={1254} fetchPriority="high" className="aspect-[4/5] w-full rounded-[1rem] object-cover" /><figcaption className="flex items-center justify-between px-2 pb-1 pt-4 text-sm"><span className="handwritten text-xl">Hi, I’m Lera.</span><span className="font-mono text-[10px] uppercase tracking-widest text-[#252b27]/60">Human behind the code</span></figcaption></figure><span className="absolute -right-2 -top-5 rotate-12 rounded-full bg-[#f5e8bd] p-4 text-[#68785b] shadow-sm" aria-hidden="true"><Sparkles size={26} /></span></div>
-        </div>
-      </section>
+          <Image className="portrait" sizes="(min-width: 800px) 320px, 70vw"
+            src="/lera-portrait.jpg" alt="Portrait of Lera Suanu" width={1254} height={1254} preload />
+        </section>
 
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border-y border-[#252b27]/15 px-6 py-5 text-xs font-medium text-[#252b27]/65 lg:px-10"><span className="font-mono">THOUGHTFUL FROM END TO END</span><span>React & TypeScript</span><span>APIs & data</span><span>Cloud & automation</span><a href="#work" aria-label="Scroll to selected work" className="rounded-full border border-[#252b27]/20 p-2"><ArrowDown size={16} /></a></div>
-
-      <section id="work" className="px-6 py-20 lg:px-10 lg:py-24">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#b85d3e]">01 / Selected engineering work</p><h2 className="mt-5 max-w-3xl text-5xl font-black tracking-[-0.04em] sm:text-6xl">Less friction.<br />More “that just works.”</h2></div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map(({ icon: Icon, title, tech, copy, bg }, index) => (
-              <motion.article key={title} whileHover={{ y: -6, rotate: -0.35 }} transition={{ duration: 0.2 }} className={`${bg} min-h-72 rounded-[2rem] p-7 shadow-[0_10px_35px_rgba(37,43,39,0.05)]`}>
-                <div className="flex items-center justify-between"><div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#252b27]/10 bg-[#fffaf2]/70"><Icon size={22} strokeWidth={1.8} aria-hidden="true" /></div><span className="font-mono text-xs text-[#252b27]/50">0{index + 1}</span></div>
-                <h3 className="mt-7 text-xl font-bold">{title}</h3><p className="mt-2 text-xs font-medium leading-5 text-[#68785b]">{tech}</p><p className="mt-4 leading-7 text-[#252b27]/60">{copy}</p>
-              </motion.article>
-            ))}
+        <section id="work" className="band">
+          <div className="shell section">
+            <p className="eyebrow">Professional projects · ReefnBid</p>
+            <h2>Selected engineering work</h2>
+            <div className="project-grid">
+              {projects.map((project) => (
+                <article key={project.title} className="project">
+                  <h3>{project.title}</h3>
+                  {project.stack && <p className="stack">{project.stack}</p>}
+                  <p>{project.problem}</p>
+                  <p>{project.contribution}</p>
+                  {project.outcome && <p>{project.outcome}</p>}
+                </article>
+              ))}
+            </div>
           </div>
-          <p className="mt-5 text-sm text-[#252b27]/50">Selected professional and independent work. Production implementations belong to their respective employers.</p>
-        </div>
-      </section>
+        </section>
 
-      <section id="experience" className="px-6 py-12 lg:px-10 lg:py-20">
-        <div className="mx-auto grid max-w-7xl gap-10 rounded-[2.25rem] bg-[#e8eddf] p-8 sm:p-12 lg:grid-cols-[0.8fr_1.2fr] lg:p-16">
-          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#68785b]">02 / The experience</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Ideas are lovely.<br />Shipping is lovelier.</h2></div>
-          <div className="space-y-8">
-            <div><p className="text-sm font-bold text-[#68785b]">2026 – Present</p><h3 className="mt-2 text-2xl font-bold">Software Engineer · ReefnBid</h3><p className="mt-3 leading-7 text-[#252b27]/65">Shipping full-stack commerce features, real-time systems, account safeguards, and automated release testing. Tackling concurrency, distributed caching, and data integrity across production services.</p></div>
-            <div><p className="text-sm font-bold text-[#68785b]">2024 – 2025</p><h3 className="mt-2 text-2xl font-bold">Cloud & DevOps · Independent Projects</h3><p className="mt-3 leading-7 text-[#252b27]/65">Built AWS infrastructure with Terraform, Docker, Kubernetes, and CI/CD pipelines, with a focus on security and repeatable deployment.</p></div>
-            <div><p className="text-sm font-bold text-[#68785b]">2021 – 2023</p><h3 className="mt-2 text-2xl font-bold">Programming Instructor · Dreamaker</h3><p className="mt-3 leading-7 text-[#252b27]/65">Taught Python, algorithms, object-oriented programming, and engineering fundamentals to more than 200 students.</p></div>
+        <section id="experience" className="shell section experience">
+          <div><h2>Experience</h2></div>
+          <div className="experience-list">
+            <article>
+              <p className="eyebrow">2026 – Present</p>
+              <h3>Software Engineer · ReefnBid</h3>
+              <p>I build and maintain marketplace features across React interfaces, Node.js APIs, and PostgreSQL. My work includes payment processing, transaction integrity, production troubleshooting, and automated testing.</p>
+            </article>
+            <article>
+              <p className="eyebrow">2024 – 2026</p>
+              <h3>Freelance Web Developer · Self-Employed</h3>
+              <p>Worked directly with clients to scope and deliver responsive landing pages and a small online storefront. Managed implementation and revisions across custom-coded pages, WordPress, and Squarespace.</p>
+            </article>
+            <article>
+              <p className="eyebrow">2024 – 2025</p>
+              <h3>Technical Operations Assistant · University of Bridgeport</h3>
+              <p>Supported campus technical operations, helped troubleshoot classroom computers and audiovisual systems, and coordinated access and scheduling with staff.</p>
+            </article>
+            <article>
+              <p className="eyebrow">2021 – 2023</p>
+              <h3>Programming Instructor · Dreamaker</h3>
+              <p>Taught Python, algorithms, and object-oriented programming through project-based instruction.</p>
+            </article>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="about" className="px-6 py-24 lg:px-10 lg:py-28">
-        <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.65fr_1fr] md:items-center">
-          <div className="overflow-hidden rounded-[2rem] bg-[#f8dfd1] shadow-[0_16px_45px_rgba(37,43,39,0.08)]"><Image sizes="(min-width: 768px) 40vw, 90vw" src="/lera-portrait.jpg" alt="Lera Suanu" width={1254} height={1254} loading="lazy" className="aspect-square h-full w-full object-cover" /></div>
-          <div><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#d66f4a]">03 / Behind the keyboard</p><h2 className="mt-6 text-5xl font-black tracking-[-0.04em]">Serious about the work.<br /><span className="font-serif italic font-normal text-[#b85d3e]">A little less serious about myself.</span></h2><p className="mt-7 max-w-2xl text-lg leading-8 text-[#252b27]/60">I have an M.S. in Computer Science from the University of Bridgeport and a B.S. in Computer Science & Technology from Hebei University of Science & Technology. I work across TypeScript, React, Node.js, PostgreSQL, Redis, AWS, and infrastructure automation. I care about software that’s useful, secure, and built to last.</p><p className="mt-5 leading-7 text-[#252b27]/60">I like asking good questions, untangling tricky systems, and making things feel easier than they were to build. Previously, I taught programming to more than 200 students—excellent practice for explaining complicated things without making anyone regret asking.</p><a href="https://github.com/leracraft" target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 font-bold text-[#68785b]">See what I’m building <ExternalLink size={16}/></a></div>
-        </div>
-      </section>
+        <section id="about" className="band">
+          <div className="shell section experience">
+            <div><h2>About</h2></div>
+            <div className="experience-list">
+              <article>
+                <h3>Education</h3>
+                <p>M.S. in Computer Science, University of Bridgeport</p>
+                <p>B.S. in Computer Science &amp; Technology, Hebei University of Science &amp; Technology</p>
+              </article>
+              <article>
+                <p className="eyebrow">Personal project</p>
+                <h3>Suanara</h3>
+                <p>My engineering portfolio, built with Next.js, React, TypeScript, and Tailwind CSS and hosted on Vercel. The repository also uses Prisma and includes Resend for contact delivery.</p>
+              </article>
+              <article>
+                <p className="eyebrow">Independent project</p>
+                <h3>AWS data protection</h3>
+                <p>Configured versioned S3 storage, Object Lock, lifecycle policies, and audit monitoring through Terraform, CloudTrail, and Athena.</p>
+              </article>
+            </div>
+          </div>
+        </section>
 
-      <section id="contact" className="px-6 pb-24 lg:px-10 lg:pb-28"><div className="mx-auto max-w-7xl rounded-[2.25rem] bg-[#f5e8bd] p-8 sm:p-12"><p className="text-xs font-bold uppercase tracking-[0.3em] text-[#8b772f]">04 / Say hello</p><h2 className="mt-6 max-w-3xl text-5xl font-black tracking-[-0.04em]">Have a good problem?<br />I’m all ears.</h2><p className="mt-5 max-w-xl text-lg text-[#252b27]/60">An interesting role, a thoughtful collaboration, or a wonderfully specific engineering question? I’d love to hear it. Bonus points if it starts with “what if.”</p><a href="mailto:lerabari65@gmail.com" className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#252b27] px-6 py-3 text-sm font-bold text-[#fffaf2] transition hover:bg-[#68785b]">Let’s talk <ArrowRight size={16} aria-hidden="true" /></a><div className="mt-8 flex items-center gap-4">{[{ href: "https://github.com/leracraft", label: "GitHub", icon: Github }, { href: "https://linkedin.com/in/lerabari-suanu-1a2b3c", label: "LinkedIn", icon: Linkedin }, { href: "mailto:lerabari65@gmail.com", label: "Email", icon: Mail }].map(({ href, label, icon: Icon }) => (<a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-full bg-[#fffaf2]/75 transition hover:-translate-y-1 hover:bg-white"><Icon size={20} /></a>))}</div></div></section>
-
-      </div>
-      <footer className="border-t border-[#252b27]/10 px-6 py-8 lg:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-[#252b27]/40 sm:flex-row sm:items-center sm:justify-between"><p className="font-bold tracking-[0.2em]">LERA SUANU</p><p>Built with care. And a few very opinionated semicolons.</p></div></footer>
-    </main>
-    </MotionConfig>
+        <section id="contact" className="shell section contact-section">
+          <div>
+            <h2>Let’s Connect</h2>
+            <p>Have a role, project, or collaboration in mind? Send me a message.</p>
+          </div>
+          <ContactForm configured={configured} />
+          <div className="social">
+            <a href={`mailto:${email}`}>Email me directly</a>
+            <a href="https://github.com/leracraft">GitHub</a>
+            <a href="https://linkedin.com/in/lerabari-suanu">LinkedIn</a>
+          </div>
+        </section>
+      </main>
+      <footer className="site-footer"><div className="shell">Lera Suanu</div></footer>
+    </>
   );
 }
