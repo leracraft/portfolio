@@ -48,9 +48,6 @@ p { line-height: 1.6; }
 .button { display: inline-block; border: 1px solid var(--accent); border-radius: .5rem; padding: .65rem 1rem; font-weight: 700; font-size: .9rem; cursor: pointer; }
 .primary { color: white; background: var(--accent); }
 .primary:hover { background: var(--ink); }
-.secondary { color: var(--accent); }
-.secondary:hover { background: var(--band); }
-.button:disabled { opacity: .65; cursor: default; }
 .portrait { width: min(75%, 20rem); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 1rem; }
 .section { padding-block: clamp(3rem, 7vw, 5rem); }
 .band { background: var(--band); border-block: 1px solid var(--line); }
@@ -65,18 +62,9 @@ p { line-height: 1.6; }
 .experience-list article + article { border-top: 1px solid var(--line); padding-top: 1.15rem; }
 .experience .eyebrow { margin: 0 0 .25rem; color: var(--rust); }
 .social { margin-top: 1rem; }
-.contact-form fieldset { min-width: 0; }
-.contact-fields { display: grid; gap: .75rem; }
-.contact-form label { display: grid; gap: .25rem; font-weight: 650; font-size: .9rem; }
-.contact-form input, .contact-form textarea { width: 100%; min-width: 0; border: 1px solid #788275; border-radius: .4rem; padding: .55rem .7rem; background: white; color: var(--ink); font-size: 1rem; font-weight: 400; }
-.contact-form textarea { resize: vertical; }
-.contact-form button { margin-top: .75rem; }
-.contact-form .form-note, .contact-form .form-error { font-size: .88rem; }
-.contact-form .form-error { color: #a12720; }
 .site-footer { border-top: 1px solid var(--line); padding-block: 1.5rem; color: var(--muted); font-size: .9rem; }
 @media (min-width: 640px) {
-  .project-grid, .contact-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .message-field { grid-column: 1 / -1; }
+  .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 800px) {
   .hero, .experience { grid-template-columns: minmax(0, 1fr) minmax(0, .65fr); gap: 3rem; }
@@ -85,4 +73,3 @@ p { line-height: 1.6; }
 }
 .contact-section { max-width: 46rem; }
 .contact-section p { margin-top: .65rem; color: var(--muted); }
-.contact-section .contact-form { margin-top: 1rem; }

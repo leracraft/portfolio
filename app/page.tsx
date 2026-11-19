@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { connection } from "next/server";
-import { ContactForm } from "./contact-form";
 
 const resume = "/resume.pdf";
 const email = "Lerabari65@gmail.com";
@@ -47,12 +45,7 @@ const projects = [
   },
 ];
 
-export default async function Home() {
-  await connection();
-  const configured = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM &&
-    process.env.CONTACT_TO && process.env.CONTACT_REDIS_URL &&
-    process.env.CONTACT_REDIS_TOKEN && process.env.CONTACT_RATE_SECRET);
-
+export default function Home() {
   return (
     <>
       <a href="#content" className="skip-link">Skip to content</a>
@@ -76,7 +69,6 @@ export default async function Home() {
             <p className="hero-detail">3 years of total experience, including freelance work. M.S. in Computer Science.</p>
             <div className="actions">
               <a className="button primary" href={resume}>View Resume</a>
-              <a className="button secondary" href={resume} download="Lera-Suanu-Resume.pdf">Download Resume</a>
             </div>
           </div>
           <Image className="portrait" sizes="(min-width: 800px) 320px, 70vw"
@@ -139,7 +131,7 @@ export default async function Home() {
               <article>
                 <p className="eyebrow">Personal project</p>
                 <h3>Suanara</h3>
-                <p>My engineering portfolio, built with Next.js, React, TypeScript, and Tailwind CSS and hosted on Vercel. The repository also uses Prisma and includes Resend for contact delivery.</p>
+                <p>My engineering portfolio, built with Next.js, React, TypeScript, and Tailwind CSS and hosted on Vercel.</p>
               </article>
               <article>
                 <p className="eyebrow">Independent project</p>
@@ -153,9 +145,8 @@ export default async function Home() {
         <section id="contact" className="shell section contact-section">
           <div>
             <h2>Let’s Connect</h2>
-            <p>Have a role, project, or collaboration in mind? Send me a message.</p>
+            <p>Have a role, project, or collaboration in mind? Email me to get in touch.</p>
           </div>
-          <ContactForm configured={configured} />
           <div className="social">
             <a href={`mailto:${email}`}>Email me directly</a>
             <a href="https://github.com/leracraft">GitHub</a>
